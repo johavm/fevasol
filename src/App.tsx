@@ -1,12 +1,10 @@
-import './App.css'
-
+import AppMap from "./components/AppMap";
 function App() {
-
   return (
     <div>
-      Hola mundo
+      <AppMap />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

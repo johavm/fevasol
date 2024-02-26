@@ -1,0 +1,14 @@
+.map-container {
+    width: 100%;
+    height: 100vh;
+  }
+  .loadingLayer {
+    right: 10px;
+    top: 50px;
+  }
+  .selectBasemap{
+    right: 10px;
+    top: 10px;
+  }
+  
+  
