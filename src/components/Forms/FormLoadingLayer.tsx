@@ -1,21 +1,22 @@
 import { Modal } from 'react-bootstrap';
-import { filetogeojson, kmltogeojson, kmztogeojson } from '../../ts/converterGeo';
+import { filetogeojson, filterData, kmltogeojson, kmztogeojson } from '../../ts/converterGeo';
 import { FormValues } from "../../interfaces/form.interfaces";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+import { Backdrop, CircularProgress } from '@mui/material';
 
 function FormLoadingLayer({ setGeoJSONDataForm, toggleForm, showForm }: any) {
     const ACCEPTED_FORMATS = [".kmz", ".kml", ".geojson"];
     const inputRef = useRef<HTMLInputElement>(null);
+    const [open, setOpen] = useState(false);
     const initialValues: FormValues = {
         hr: "",
         infraestructura: "postes",
         administrado: "amov",
         file: ''
     }
-
-
     const handleSubmit = async (values: FormValues, { setSubmitting }: any) => {
+        setOpen(true);
         setSubmitting(true);
         const selectedFile = inputRef.current?.files?.[0];
         if (selectedFile) {
@@ -46,9 +47,15 @@ function FormLoadingLayer({ setGeoJSONDataForm, toggleForm, showForm }: any) {
                 default:
                     alert("Formato incorrecto. Por favor, seleccione un archivo con uno de estos formatos: " + ACCEPTED_FORMATS.join(", "));
             }
-            setGeoJSONDataForm({ geojson: JSON.stringify(geojson, null, 2), ...values })
+            geojson = filterData(geojson, `${values.infraestructura == "postes" ? "Point" : "LineString"}`)
+            if (!geojson.features[0]){
+                alert(`No presenta datos de tipo: ${values.infraestructura == "postes" ? "Point" : "LineString"}`)
+            } else{
+                setGeoJSONDataForm({ geojson: JSON.stringify(geojson, null, 2), ...values })
+                toggleForm()
+            }
         }
-        toggleForm()
+        setOpen(false);
         setSubmitting(false);
     };
 
@@ -125,6 +132,12 @@ function FormLoadingLayer({ setGeoJSONDataForm, toggleForm, showForm }: any) {
                     )}
                 </Formik>
             </div>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={open}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </Modal>
     )
 }

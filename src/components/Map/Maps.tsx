@@ -10,6 +10,7 @@ import GeoJSON from 'ol/format/GeoJSON';
 import { FormValues } from '../../interfaces/form.interfaces';
 import { postData } from '../../ts/fetchData';
 import XYZ from 'ol/source/XYZ';
+import combinedStyle from '../../ts/stylePrimary';
 
 function Maps({ geoDataForm }: { geoDataForm: FormValues }) {
     const mapRef = useRef<Map>();
@@ -75,6 +76,7 @@ function Maps({ geoDataForm }: { geoDataForm: FormValues }) {
                 minZoom: 10
             });
             map.addLayer(capa);
+            capa.setStyle(combinedStyle)
             let extentLayer = capa.getSource()?.getExtent()
             if (extentLayer && extentLayer[0] !== Infinity) {
                 map.getView().fit(extentLayer)
