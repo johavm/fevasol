@@ -1,4 +1,4 @@
-import { Map, View } from 'ol';
+import { Map, Overlay, View } from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 import "ol/ol.css";
@@ -11,6 +11,10 @@ import { FormValues } from '../../interfaces/form.interfaces';
 import { postData } from '../../ts/fetchData';
 import XYZ from 'ol/source/XYZ';
 import combinedStyle from '../../ts/stylePrimary';
+import Select from 'ol/interaction/Select.js';
+import { pointerMove } from 'ol/events/condition';
+import { getCenter } from 'ol/extent';
+
 
 function Maps({ geoDataForm }: { geoDataForm: FormValues }) {
     const mapRef = useRef<Map>();
@@ -63,7 +67,7 @@ function Maps({ geoDataForm }: { geoDataForm: FormValues }) {
             console.log(map.getView().getViewStateAndExtent().extent)
         }
     }, [basemapType]);
-    
+
     useEffect(() => {
         const map = mapRef.current;
         if (map && geoDataForm.geojson) {
@@ -77,14 +81,44 @@ function Maps({ geoDataForm }: { geoDataForm: FormValues }) {
             });
             map.addLayer(capa);
             capa.setStyle(combinedStyle)
+            capa.set('hr', geoDataForm.hr)
+            capa.set('administrado', geoDataForm.administrado)
             let extentLayer = capa.getSource()?.getExtent()
             if (extentLayer && extentLayer[0] !== Infinity) {
                 map.getView().fit(extentLayer)
             }
             postData('postData', geoDataForm).then(resp => console.log(resp.id))
+            const select = new Select({
+                condition: pointerMove
+            })
+            map.addInteraction(select)
+            let popup = document.createElement('div');
+            popup.id = 'popup'
+            if (popup) {
+                let overlay = new Overlay({
+                    element: popup,
+                    positioning: 'bottom-center',
+                    stopEvent: false,
+                    offset: [0, -10]
+                });
+                map.addOverlay(overlay)
+                select.on('select', function (e) {
+                    var feature = e.selected[0];
+                    if (feature) {
+                        let layer = select.getLayer(feature)
+                        let coordinates = feature.getGeometry()?.getExtent()
+                        if(coordinates){
+                            overlay.setPosition(getCenter(coordinates));
+                        }
+                        popup.innerHTML = '<p><strong>Hoja de Ruta:</strong> ' + layer.get('hr') + '</p>' + '<p><strong>Ademinstrado:</strong> ' + layer.get('administrado') + '</p>'
+                    } else {
+                        overlay.setPosition(undefined);
+                    }
+                })
+            }
         }
     }, [geoDataForm]);
-    
+
     return (
         <div className='position-relative'>
             <div className="map-container" id='map'></div>
