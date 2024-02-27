@@ -1,18 +1,20 @@
 import { Modal } from 'react-bootstrap';
-import { filetogeojson, filterData, kmltogeojson, kmztogeojson } from '../../ts/converterGeo';
+import { filetogeojson, filterData, kmltogeojson, kmztogeojson } from './ts/converterGeo';
 import { FormValues } from "../../interfaces/form.interfaces";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useRef, useState } from 'react';
 import { Backdrop, CircularProgress } from '@mui/material';
+import { ACCEPTED_FORMATS } from './ts/formatAcepted';
+import validateForm from './ts/validateForm';
 
 function FormLoadingLayer({ setGeoJSONDataForm, toggleForm, showForm }: any) {
-    const ACCEPTED_FORMATS = [".kmz", ".kml", ".geojson"];
     const inputRef = useRef<HTMLInputElement>(null);
     const [open, setOpen] = useState(false);
     const initialValues: FormValues = {
         hr: "",
         infraestructura: "postes",
         administrado: "amov",
+        instrumento: 'DIA',
         file: ''
     }
     const handleSubmit = async (values: FormValues, { setSubmitting }: any) => {
@@ -58,38 +60,13 @@ function FormLoadingLayer({ setGeoJSONDataForm, toggleForm, showForm }: any) {
         setOpen(false);
         setSubmitting(false);
     };
-
-    const validate = (values: FormValues) => {
-        const errors: Partial<FormValues> = {};
-        if (!values.hr) {
-            errors.hr = 'Este campo es requerido';
-        } else if (values.hr.length !== 13 || values.hr.split('-').length !== 3) {
-            errors.hr = 'No es una hoja de ruta correcta'
-        }
-        if (!values.infraestructura) {
-            errors.infraestructura = 'Este campo es requerido';
-        }
-        if (!values.administrado) {
-            errors.administrado = 'Este campo es requerido';
-        }
-        if (!values.file) {
-            errors.file = 'Este campo es requerido';
-        } else {
-            const extension = '.' + values.file.split(".").pop()?.toLowerCase();
-            if (!ACCEPTED_FORMATS.includes(extension)) {
-                errors.file = 'Archivo incorrecto!';
-            }
-        }
-
-        return errors;
-    };
     return (
         <Modal show={showForm} onHide={toggleForm}>
             <div className='mb-3'>
                 <Formik
                     initialValues={initialValues}
                     onSubmit={handleSubmit}
-                    validate={validate}
+                    validate={validateForm}
                 >
                     {({ isSubmitting }) => (
                         <Form className='container-fluid m-0 p-6 row d-flex smb-3'>
@@ -100,6 +77,16 @@ function FormLoadingLayer({ setGeoJSONDataForm, toggleForm, showForm }: any) {
                                 <label className='col-form-label text-sm-start me-3' htmlFor="inputHR">Hoja de Ruta</label>
                                 <Field className='form-control' id='inputHR' type="text" name="hr" placeholder="E-123456-2023" />
                                 <ErrorMessage name="hr" component="div" className="text-danger" />
+                            </div>
+                            <div className="row">
+                                <label className='col-form-label text-sm-start me-3' htmlFor="instrumentoSelect">Infraestructura</label>
+                                <Field className='form-select' as="select" name="instrumento" id="instrumentoSelect">
+                                    <option value="DIA">DIA</option>
+                                    <option value="PAMA">PAMA</option>
+                                    <option value="ITS">ITS</option>
+                                    <option value="EIA-sd">EIA-sd</option>
+                                </Field>
+                                <ErrorMessage name="instrumento" component="div" className="text-danger" />
                             </div>
                             <div className="row">
                                 <label className='col-form-label text-sm-start me-3' htmlFor="infraestructuraSelect">Infraestructura</label>

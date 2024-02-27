@@ -1,6 +1,4 @@
-import { Map, Overlay, View } from 'ol';
-import TileLayer from 'ol/layer/Tile';
-import OSM from 'ol/source/OSM';
+import { Map, View } from 'ol';
 import "ol/ol.css";
 import './Styles/Map.css'
 import { useEffect, useRef, useState } from 'react';
@@ -8,12 +6,10 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import { FormValues } from '../../interfaces/form.interfaces';
-import { postData } from '../../ts/fetchData';
-import XYZ from 'ol/source/XYZ';
-import combinedStyle from '../../ts/stylePrimary';
-import Select from 'ol/interaction/Select.js';
-import { pointerMove } from 'ol/events/condition';
-import { getCenter } from 'ol/extent';
+import combinedStyle from './ts/stylePrimary';
+import getBasemapLayer from './ts/getBasmap';
+import SelectBasemap from './components/selectBasemap';
+import pointerHover from './ts/pointerHover';
 
 
 function Maps({ geoDataForm }: { geoDataForm: FormValues }) {
@@ -21,26 +17,6 @@ function Maps({ geoDataForm }: { geoDataForm: FormValues }) {
     const [basemapType, setBasemapType] = useState<string>('OSM');
     const handleChangeBasemap = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setBasemapType(event.target.value);
-    };
-    const getBasemapLayer = (type: string) => {
-        switch (type) {
-            case 'GoogleMaps':
-                return new TileLayer({
-                    source: new XYZ({
-                        url: 'https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}'
-                    })
-                });
-            case 'GoogleMapsSatelite':
-                return new TileLayer({
-                    source: new XYZ({
-                        url: 'https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}'
-                    })
-                })
-            default:
-                return new TileLayer({
-                    source: new OSM()
-                });
-        }
     };
     useEffect(() => {
         if (!mapRef.current) {
@@ -77,56 +53,27 @@ function Maps({ geoDataForm }: { geoDataForm: FormValues }) {
                         featureProjection: 'EPSG:4326'
                     }).readFeatures(JSON.parse(geoDataForm.geojson))
                 }),
-                minZoom: 10
+                minZoom: Number(`${geoDataForm.infraestructura == 'postes' ? 14 : 11}`)
             });
             map.addLayer(capa);
             capa.setStyle(combinedStyle)
             capa.set('hr', geoDataForm.hr)
             capa.set('administrado', geoDataForm.administrado)
+            capa.set('infraestructura', geoDataForm.infraestructura)
+            capa.set('instrumento', geoDataForm.instrumento)
+            
             let extentLayer = capa.getSource()?.getExtent()
             if (extentLayer && extentLayer[0] !== Infinity) {
                 map.getView().fit(extentLayer)
             }
-            postData('postData', geoDataForm).then(resp => console.log(resp.id))
-            const select = new Select({
-                condition: pointerMove
-            })
-            map.addInteraction(select)
-            let popup = document.createElement('div');
-            popup.id = 'popup'
-            if (popup) {
-                let overlay = new Overlay({
-                    element: popup,
-                    positioning: 'bottom-center',
-                    stopEvent: false,
-                    offset: [0, -10]
-                });
-                map.addOverlay(overlay)
-                select.on('select', function (e) {
-                    var feature = e.selected[0];
-                    if (feature) {
-                        let layer = select.getLayer(feature)
-                        let coordinates = feature.getGeometry()?.getExtent()
-                        if(coordinates){
-                            overlay.setPosition(getCenter(coordinates));
-                        }
-                        popup.innerHTML = '<p><strong>Hoja de Ruta:</strong> ' + layer.get('hr') + '</p>' + '<p><strong>Ademinstrado:</strong> ' + layer.get('administrado') + '</p>'
-                    } else {
-                        overlay.setPosition(undefined);
-                    }
-                })
-            }
+            pointerHover(map)
         }
     }, [geoDataForm]);
 
     return (
         <div className='position-relative'>
             <div className="map-container" id='map'></div>
-            <select className='position-absolute selectBasemap btn btn-dark' value={basemapType} onChange={handleChangeBasemap}>
-                <option value="OSM">OpenStreetMap</option>
-                <option value="GoogleMaps">Google Maps</option>
-                <option value="GoogleMapsSatelite">Google Maps Satétite</option>
-            </select>
+            <SelectBasemap value={basemapType} onChange={handleChangeBasemap} />
         </div>
     )
 }

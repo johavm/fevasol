@@ -1,0 +1,1 @@
+export const ACCEPTED_FORMATS = [".kmz", ".kml", ".geojson"];

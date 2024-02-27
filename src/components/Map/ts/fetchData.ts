@@ -1,4 +1,4 @@
-import { FormValues } from "../interfaces/form.interfaces";
+import { FormValues } from "../../../interfaces/form.interfaces";
 
 async function postData(method: string, body: FormValues) {
     try {
