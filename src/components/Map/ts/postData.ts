@@ -12,8 +12,9 @@ async function postData(method: string, body: FormValues) {
                 body: JSON.stringify({
                     "method": method,
                     "administrado": body.administrado,
-                    "document": body.hr,
+                    "hr": body.hr,
                     "infraestructura": body.infraestructura,
+                    "instrumento": body.instrumento,
                     "geojson": JSON.parse(body.geojson)
                 })
             });

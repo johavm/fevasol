@@ -6,6 +6,7 @@ import { useRef, useState } from 'react';
 import { Backdrop, CircularProgress } from '@mui/material';
 import { ACCEPTED_FORMATS } from './ts/formatAcepted';
 import validateForm from './ts/validateForm';
+import { postData } from '../Map/ts/postData';
 
 function FormLoadingLayer({ setGeoJSONDataForm, toggleForm, showForm }: any) {
     const inputRef = useRef<HTMLInputElement>(null);
@@ -53,7 +54,10 @@ function FormLoadingLayer({ setGeoJSONDataForm, toggleForm, showForm }: any) {
             if (!geojson.features[0]){
                 alert(`No presenta datos de tipo: ${values.infraestructura == "postes" ? "Point" : "LineString"}`)
             } else{
-                setGeoJSONDataForm({ geojson: JSON.stringify(geojson, null, 2), ...values })
+                const posGeojson: any = { geojson: JSON.stringify(geojson, null, 2), ...values }
+                console.log(posGeojson)
+                setGeoJSONDataForm(posGeojson)
+                postData('postData', posGeojson)
                 toggleForm()
             }
         }

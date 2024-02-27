@@ -6,18 +6,21 @@ import VectorLayer from 'ol/layer/Vector';
 import VectorSource from 'ol/source/Vector';
 import GeoJSON from 'ol/format/GeoJSON';
 import { FormValues } from '../../interfaces/form.interfaces';
-import combinedStyle from './ts/stylePrimary';
 import getBasemapLayer from './ts/getBasmap';
 import SelectBasemap from './components/selectBasemap';
 import pointerHover from './ts/pointerHover';
+import getData from './ts/getData';
+import { StylePrimary } from './ts/styleLayers';
 
 
 function Maps({ geoDataForm }: { geoDataForm: FormValues }) {
     const mapRef = useRef<Map>();
     const [basemapType, setBasemapType] = useState<string>('OSM');
+    const [indexLayer, setIndexLayer ] = useState<number>(9999)
     const handleChangeBasemap = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setBasemapType(event.target.value);
     };
+    const reduceIndexLayerLoading = () => setIndexLayer(prevIndex => prevIndex - 1);
     useEffect(() => {
         if (!mapRef.current) {
             const view: View = new View({
@@ -40,7 +43,6 @@ function Maps({ geoDataForm }: { geoDataForm: FormValues }) {
             const basemap = getBasemapLayer(basemapType);
             map.getLayers().setAt(0, basemap);
             map.updateSize();
-            console.log(map.getView().getViewStateAndExtent().extent)
         }
     }, [basemapType]);
 
@@ -56,16 +58,18 @@ function Maps({ geoDataForm }: { geoDataForm: FormValues }) {
                 minZoom: Number(`${geoDataForm.infraestructura == 'postes' ? 14 : 11}`)
             });
             map.addLayer(capa);
-            capa.setStyle(combinedStyle)
+            capa.setStyle(StylePrimary)
             capa.set('hr', geoDataForm.hr)
             capa.set('administrado', geoDataForm.administrado)
             capa.set('infraestructura', geoDataForm.infraestructura)
             capa.set('instrumento', geoDataForm.instrumento)
-            
+            capa.setZIndex(indexLayer);
+            reduceIndexLayerLoading()
             let extentLayer = capa.getSource()?.getExtent()
             if (extentLayer && extentLayer[0] !== Infinity) {
                 map.getView().fit(extentLayer)
             }
+            getData(map, geoDataForm.administrado)
             pointerHover(map)
         }
     }, [geoDataForm]);
