@@ -1,0 +1,260 @@
+header {
+    display: flex;
+    height: 70px;
+    justify-content: space-between;
+    background-color: black;
+    color: white;
+    align-items: center;
+    min-height: 120px;
+}
+.logo {
+    display: flex;
+    align-items: center;
+}
+.logo img {
+    height: 50px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+nav a {
+    font-weight: 10px;
+    padding-right: 0.5px;
+}
+#check {
+    /*display: none;*/
+}
+.checkbtn {
+    font-size: 25px;
+    color: white;
+    float: right;
+    line-height: 80px;
+    margin-right: 40px;
+    cursor: pointer;
+    /*display: none;*/
+}
+
+@media (max-width:768px) {
+    header {
+        flex-direction: column;
+    }
+    nav {
+        padding: 10px 0px;
+    };
+    .checkbtn {
+        display: block;
+    }
+    #encabezado ul {
+        position: fixed;
+        width: 100%;
+        height: 100hv;
+        background: black;
+        text-align: center;
+        top: 80px;
+        left: 100%;
+        transition: all 0.5s;
+    }
+    #check: :checked ~ ul {
+        left: 0%;
+        display: block;
+    }
+    #encabezado nav ul a {
+        display: block;
+        margin: 50px 0;
+        line-height: 30px;
+        font-size: 20px;
+    }
+}
+body {
+    margin: 0;
+    padding: 0;
+    width: 100;
+    height: 100;
+    font-family: sans-serif;
+    letter-spacing: 0.03em;
+    line-height: 1.6;
+}
+.seccion-1 {
+    background-color:white;
+    color: black;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 20px;
+    padding: 10px;
+    display: flex;
+}
+.seccion-1 a {
+    background-color: gray;
+    color: white;
+    display: block;
+    padding: 10px;
+    text-align: center;
+    margin-top: 10px;
+    border-radius: 8px;
+}
+.acerca-imagen {
+    margin-right: 10px;
+    margin-left: 10px;
+}
+.seccion-3 h3 {
+    text-align: center;
+    font-size: 40px;
+    color: white;
+}
+.seccion-3 {
+    text-align: center;
+    font-size: 20px;
+    background-color: black;
+    padding: 10px;
+}
+.card-container {
+    width: 100%;
+    max-width: 1200px;
+    height: 430px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: auto;
+    background-color: black;
+}
+.card {
+    width: 330px;
+    height: 430px;
+    border-radius: 8px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    margin: 10px;
+    text-align: center;
+    transition: all 0.25s;
+    margin-bottom: 10px;
+    background-color: white;
+    padding: 10px;
+}
+.card a {
+    background-color: gray;
+    color: white;
+    display: block;
+    padding: 10px;
+    text-align: center;
+    margin-top: 10px;
+    border-radius: 8px;
+}
+.imagen {
+    width: 250px;
+    height: 150px;
+}
+footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: black;
+  }
+  
+.form-header {
+    text-align: center;
+    background-color: #f6f7f8;
+    border: 1px solid #d6d9dc;
+    border-radius: 3px;
+    width: 80%;
+    margin: 10px auto;
+    padding: 50px;
+  }
+  
+.form-header h1 {
+    font-size: 30px;
+    margin-bottom: 20px;
+  }
+  
+  /* ------------- Formulario ------------- */
+  
+.formulario {
+    background-color: #f6f7f8;
+    border: 1px solid #d6d9dc;
+    border-radius: 3px;
+  
+    width: 80%;
+    padding: 50px;
+    margin: 30px 0 40px 0;
+  }
+  /* ------------- Campos del Formulario ------------- */
+
+.form-row {
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+  
+.form-row input[type="text"],
+.form-row input[type="email"] {
+    background-color: #bdbdbd;
+    border: 0;
+    border-radius: 6px;
+    width: 100%;
+    padding: 7px;
+    font-size: 14px;
+  }
+  
+.form-row label {
+    margin-bottom: 3px;
+    text-align: initial;
+  }
+.form-row textarea {
+    font-family: "Helvetica", "Arial", sans-serif;
+    font-size: 14px;
+  
+  
+    background-color: #bdbdbd;
+    border: 0;
+    border-radius: 6px;
+  
+  
+    min-height: 200px;
+    margin-bottom: 10px;
+    padding: 7px;
+    resize: none;
+  
+  
+    width: 100%;
+  }
+  /* ------------- Para Pantallas de más de 700px ------------- */
+  
+  
+.form-row textarea {
+      width: 250px;
+    }
+.form-row button {
+        font-size: 16px;
+        font-weight: bold;
+      
+      
+        color: #ffffff;
+        background-color: #5995da;
+      
+      
+        border: none;
+        border-radius: 3px;
+      
+      
+        padding: 10px 40px;
+        cursor: pointer;
+      }
+      
+      
+.form-row button:hover {
+        background-color: #76aeed;
+      }
+      
+      
+.form-row button:active {
+        background-color: #407fc7;
+      }
+      
+      
+      /* ------------- Para Pantallas de más de 700px ------------- */
+      
+      
+.form-row button {
+    margin-left: 120px;
+}
