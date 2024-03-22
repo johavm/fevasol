@@ -12,60 +12,62 @@
     <header id="encabezado">
         <div class="logo">
             <img src="./img/sin fondo.png" alt="sin fondo">
-            <h2 class="nombre-compañia">Grupo Fevasol</h2>
+            <h1 class="nombre-compañia">Grupo Fevasol</h1>
         </div>
         <nav>
-            <input type="checkbox" id="check" />
             <label for="check" class="checkbtn">
                 <i class="fa-solid fa-bars"></i>
             </label>
+            <input type="checkbox" id="check" />
             <ul class="menu">
                 <a href="https://www.facebook.com/FevasolSAC">Inicio</a>
-                <a href="https://www.facebook.com/FevasolSAC">Acerca del Grupo Fevasol</a>
                 <a href="https://www.facebook.com/FevasolSAC">Trabajos</a>
                 <a href="https://www.facebook.com/FevasolSAC">Servicios</a>
                 <a href="https://www.facebook.com/FevasolSAC">Contacto</a>
+                <a href="https://www.facebook.com/FevasolSAC">Nosotros</a>
             </ul>
         </nav>
     </header>
     <main class="seccion-principal">
         <section class="seccion-1">
-            <div class="Acerca de">
-                <h2>Acerca del Grupo Fevasol</h2>
-                <p>El Grupo Fevasol lleva más de 20 años de experiencia en reparación y rebobinado de herramientas eléctricas e inalámbricas del Perú.</p>
-                <a href="https://www.facebook.com/FevasolSAC">Leer más</a>
+            <div class="imagen-container">
+                <img src="./img/fevasol.jpg" alt="">
             </div>
-            <div class="acerca-imagen">
-                <img src="./img/fondo blanco.jpg" alt="" style="width: 400px;height: 400px;">
+            <div class="acerca_de-container">
+                <div class="acerca_de">
+                    <h1>Grupo Fevasol</h1>
+                    <p>El Grupo Fevasol lleva más de 20 años de experiencia en reparación y rebobinado de herramientas eléctricas e inalámbricas del Perú.</p>
+                    <a href="#contacto">Contactanos</a>
+                </div>
+                <div class="acerca-imagen">
+                    <img src="./img/fondo blanco.jpg" alt="" >
+                </div>
             </div>
-        </section>
-        <section class="seccion-2">
-            <img src="./img/fevasol.jpg" alt="">
         </section>
         <section class="seccion-3">
-            <h3>Servicios</h3>
+            <h1>Servicios</h1>
             <div class="card-container">
                 <div class="card">
                     <img class="imagen" src="./img/reparación.jpg" alt="">
-                    <h4>Reparación y Rebobinado</h4>
+                    <h2>Reparación y Rebobinado</h2>
                     <p>Rotomartillos, demoledores, taladros inalámbricos y alámbricos, amoladoras, tronzadoras y más.</p>
                     <a href="https://www.facebook.com/FevasolSAC">Leer más</a>
                 </div>
                 <div class="card">
                     <img class="imagen" src="./img/repuesto.jpg" alt="">
-                    <h4>Venta de repuestos</h4>
+                    <h2>Venta de repuestos</h2>
                     <p>Rotomartillos, demoledores, taladros inalámbricos y alámbricos, amoladoras, tronzadoras y más.</p>
                     <a href="https://www.facebook.com/FevasolSAC">Leer más</a>
                 </div>
                 <div class="card">
                     <img class="imagen" src="./img/carbon.jpg" alt="">
-                    <h4>Venta de carbones</h4>
+                    <h2>Venta de carbones</h2>
                     <p>Rotomartillos, demoledores, taladros inalámbricos y alámbricos, amoladoras, tronzadoras y más.</p>
                     <a href="https://www.facebook.com/FevasolSAC">Leer más</a>
                 </div>
                 <div class="card">
                     <img class="imagen" src="./img/consulta.jpg" alt="">
-                    <h4>Consulta telefónica</h4>
+                    <h2>Consulta telefónica</h2>
                     <p>Rotomartillos, demoledores, taladros inalámbricos y alámbricos, amoladoras, tronzadoras y más.</p>
                     <a href="https://www.facebook.com/FevasolSAC">Leer más</a>
                 </div>
@@ -75,7 +77,7 @@
     <footer id="contacto">
         <h1>Contacto</h1>
         <p><em>¡Esperamos tu consulta!</em></p>
-        <form action="" method="get" class="formulario" id="form">
+        <form action="" method="POST" class="formulario" id="form">
         <div class="form-row">
             <label for="nombre">Nombre</label>
             <input id="nombre" name="nombre" type="text" />
@@ -93,7 +95,7 @@
             <label for="mensaje">Mensaje</label>
             <textarea id="mensaje" name="mensaje"></textarea>
           </div>
-        <div class="form-row">
+        <div class="form-row button-sendContact">
             <button>Enviar</button>
           </div>
       </form>
